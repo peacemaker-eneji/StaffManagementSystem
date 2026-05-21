@@ -1,11 +1,13 @@
 // Builder Config
+using StaffManagementSystem.Application;
+
 var builder = WebApplication.CreateBuilder(args);
 var bconfig = builder.Configuration;
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAuthorization();
+builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(ApplicationAssembly.Assembly));
 builder.Services.AddCors(options => options.AddPolicy("AllowSpecificOrigin", policy =>
             policy.WithOrigins("https://localhost:7140")
                   .AllowAnyHeader()

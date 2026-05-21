@@ -7,9 +7,9 @@ A staff management system built with C# and .NET Core, leveraging Entity Framewo
 
 
 ## Sprint 1 (Milestones)
-- **Create Solution Structure** [x]
+- **Create Solution Structure** ✅
 
-	I followed this pattern and used the same hierarchy for the project references
+	Following this pattern and I maintained the same hierarchy for the project references
 	
 	![pattern](docs/sprint1/ticket1/pattern.png)
 
@@ -18,8 +18,15 @@ A staff management system built with C# and .NET Core, leveraging Entity Framewo
 	![Running](docs/sprint1/ticket1/running.png)
 
 
-- **Setup Web API + Swagger** [x]
+
+- **Setup Web API + Swagger** ✅
 
 	Here is the swagger ui showing the Default Api Template Endpoint
 	![swagger ui](docs/sprint1/ticket2/swaggerui.png)
 
+- **Add MediatR** ✅
+
+	Added mediatR, added an AssemblyReference Class to all projects (Commands and Queries are in the Application project).
+
+
+	
