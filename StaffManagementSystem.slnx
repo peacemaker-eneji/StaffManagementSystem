@@ -3,6 +3,13 @@
     <File Path=".gitignore" />
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/Solution Items/docs/" />
+  <Folder Name="/Solution Items/docs/sprint1/" />
+  <Folder Name="/Solution Items/docs/sprint1/ticket1/">
+    <File Path="../../../OneDrive - Axxess Technology Solutions/Pictures/Screenshots/folder_structure.png" />
+    <File Path="../../../OneDrive - Axxess Technology Solutions/Pictures/Screenshots/pattern.png" />
+    <File Path="../../../OneDrive - Axxess Technology Solutions/Pictures/Screenshots/running.png" />
+  </Folder>
   <Project Path="StaffManagementSystem.Api/StaffManagementSystem.Api.csproj" />
   <Project Path="StaffManagementSystem.Application/StaffManagementSystem.Application.csproj" />
   <Project Path="StaffManagementSystem.Domain/StaffManagementSystem.Domain.csproj" />
