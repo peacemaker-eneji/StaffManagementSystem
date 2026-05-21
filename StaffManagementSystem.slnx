@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="StaffManagementSystem.Api/StaffManagementSystem.Api.csproj" />
+  <Project Path="StaffManagementSystem.Application/StaffManagementSystem.Application.csproj" />
+  <Project Path="StaffManagementSystem.Domain/StaffManagementSystem.Domain.csproj" />
+  <Project Path="StaffManagementSystem.Infrastructure/StaffManagementSystem.Infrastructure.csproj" />
+</Solution>
