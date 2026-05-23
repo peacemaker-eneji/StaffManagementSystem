@@ -1,8 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using StaffManagementSystem.Domain.Models;
+using StaffManagementSystem.Infrastucture;
 
 namespace StaffManagementSystem.Infrastructure.Persistence {
-    internal class AppDbContext {
+    public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<User>(options) {
+        public override DbSet<User> Users { get; set; }
+        public DbSet<AttendanceRecord> AttendanceRecords { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder) {
+            base.OnModelCreating(builder);
+            builder.ApplyConfigurationsFromAssembly(InfrastructureAssembly.Assembly);
+        }
     }
 }

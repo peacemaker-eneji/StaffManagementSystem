@@ -1,30 +1,31 @@
 // Builder Config
+using DotNetEnv;
+using StaffManagementSystem.Api;
 using StaffManagementSystem.Application;
+using StaffManagementSystem.Infrastructure;
+using StaffManagementSystem.Infrastructure.Persistence;
+
+Env.Load();
+
 
 var builder = WebApplication.CreateBuilder(args);
-var bconfig = builder.Configuration;
+var config = builder.Configuration;
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(ApplicationAssembly.Assembly));
-builder.Services.AddCors(options => options.AddPolicy("AllowSpecificOrigin", policy =>
-            policy.WithOrigins("https://localhost:7140")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod()));
-
-
-
-
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(config);
+builder.Services.AddPresentation();
 
 //// APP Confing
 var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseCors("AllowSpecificOrigin");
 app.MapControllers();
+app.UseAuthentication();
+app.UseAuthorization();
 if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+await DatabaseInitializer.InitializeAsync(app.Services);
 
 app.Run();
