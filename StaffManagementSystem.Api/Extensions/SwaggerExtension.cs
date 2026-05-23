@@ -6,6 +6,7 @@ namespace StaffManagementSystem.Api.Extensions {
     public static class SwaggerExtension {
         public static IServiceCollection AddSwaggerDocs(this IServiceCollection services) {
             services.AddSwaggerGen(o => {
+                o.UseInlineDefinitionsForEnums();
                 o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme {
                     Name = "Authorization",
                     Description = "Enter your token in this field",

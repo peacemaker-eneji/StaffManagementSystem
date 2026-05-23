@@ -1,4 +1,5 @@
 ﻿using StaffManagementSystem.Api.Extensions;
+using System.Text.Json.Serialization;
 
 namespace StaffManagementSystem.Api {
     static public class DependencyInjection {
@@ -8,7 +9,8 @@ namespace StaffManagementSystem.Api {
                               .AllowAnyHeader()
                               .AllowAnyMethod()));
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddEndpointsApiExplorer();
             services.AddJwtAuthentication();
             services.AddAuthorization();

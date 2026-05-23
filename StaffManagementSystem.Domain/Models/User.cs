@@ -7,7 +7,6 @@ namespace StaffManagementSystem.Domain.Models {
         public required string Firstname { get; set; }
         public required string Lastname { get; set; }
         public bool IsActive { get; set; } = true;
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         public Role Role { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public IEnumerable<AttendanceRecord>? AttendanceRecords;
