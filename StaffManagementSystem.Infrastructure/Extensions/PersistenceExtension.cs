@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StaffManagementSystem.Domain.Interfaces;
 using StaffManagementSystem.Infrastructure.Persistence;
 using StaffManagementSystem.Infrastucture;
 
@@ -11,6 +12,7 @@ namespace StaffManagementSystem.Infrastructure.Extensions {
             string assembly_name = InfrastructureAssembly.Assembly.GetName().Name!;
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(config.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly(assembly_name)));
+            services.AddScoped<IAppDbContext, AppDbContext>();
 
             return services;
         }

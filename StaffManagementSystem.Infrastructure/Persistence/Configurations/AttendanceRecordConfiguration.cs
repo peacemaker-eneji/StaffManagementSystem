@@ -12,6 +12,9 @@ namespace StaffManagementSystem.Infrastructure.Persistence.Configurations {
 
             builder.HasIndex(r => new { r.UserId, r.Date })
                 .IsUnique();
+
+            builder.Property(u => u.Status)
+                .HasConversion<string>();
         }
     }
 }

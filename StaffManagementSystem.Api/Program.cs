@@ -1,5 +1,6 @@
 // Builder Config
 using DotNetEnv;
+using Hangfire;
 using StaffManagementSystem.Api;
 using StaffManagementSystem.Application;
 using StaffManagementSystem.Infrastructure;
@@ -11,9 +12,9 @@ Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
-builder.Services.AddApplication();
+builder.Services.AddApplication(config);
 builder.Services.AddInfrastructure(config);
-builder.Services.AddPresentation();
+builder.Services.AddPresentation(config);
 
 //// APP Confing
 var app = builder.Build();
@@ -22,9 +23,12 @@ app.UseCors("AllowSpecificOrigin");
 app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseHangfireServer();
+
 if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseHangfireDashboard();
 }
 await DatabaseInitializer.InitializeAsync(app.Services);
 
