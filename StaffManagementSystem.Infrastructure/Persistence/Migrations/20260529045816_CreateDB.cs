@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StaffManagementSystem.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class CreateDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,7 +33,7 @@ namespace StaffManagementSystem.Infrastructure.Persistence.Migrations
                     Firstname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Lastname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -53,6 +53,25 @@ namespace StaffManagementSystem.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BulkImportJobs",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FailedFileId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ErrorMessage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Total = table.Column<int>(type: "int", nullable: false),
+                    Passed = table.Column<int>(type: "int", nullable: false),
+                    Failed = table.Column<int>(type: "int", nullable: false),
+                    StartedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BulkImportJobs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -170,7 +189,8 @@ namespace StaffManagementSystem.Infrastructure.Persistence.Migrations
                     Date = table.Column<DateOnly>(type: "date", nullable: false),
                     ClockIn = table.Column<TimeOnly>(type: "time", nullable: true),
                     ClockOut = table.Column<TimeOnly>(type: "time", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    IsHalfDay = table.Column<bool>(type: "bit", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -250,6 +270,9 @@ namespace StaffManagementSystem.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "AttendanceRecords");
+
+            migrationBuilder.DropTable(
+                name: "BulkImportJobs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

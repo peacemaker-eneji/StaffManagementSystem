@@ -40,13 +40,13 @@ middleware pipelines, and authentication via ASP.NET Core Identity, making it a 
 
 	Created User & AttendanceRecord Models. Used the `IEntityTypeConfiguration` to create one to many relationship from User to Attendance Record
 	with a cascading `DeleteBehavior`.
-	I also added constraint to ensure that only one AttendanceRecord is created for an Employee in a Day.
+	I also added a constraint to ensure that only one AttendanceRecord is created for an Employee in a Day.
 	
 	[Commit](https://github.com/peacemaker-eneji/StaffManagementSystem/commit/f49f207a4ae95a3d2ff87d8280335afd94f7a41b)
 
 - **Ticket 5: Setup EF Core + Database** ✅
 
-	Created the `AppDbContext` class, Setup up Sql Server Connection and Migration Destination. Using dotnet-ef I created migrations and 
+	Created the `AppDbContext` class, Setup up Sql Server Connection and Migration Destination. Using dotnet-ef, I created migrations and 
 	Updated the Databse.
 
 	![after migration](docs/sprint1/ticket5/after_migration.png)
