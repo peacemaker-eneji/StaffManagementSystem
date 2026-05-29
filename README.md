@@ -72,23 +72,39 @@ middleware pipelines, and authentication via ASP.NET Core Identity, making it a 
 	
 	[Commit](https://github.com/peacemaker-eneji/StaffManagementSystem/commit/e8b298e7350ef54ba68c1af76f09f01d7b57e05e)
 
-- **Ticket 8: Bulk User Ingestion** ❌
-
-	<!-- Added mediatR, added an AssemblyReference Class to all projects (Commands and Queries are in the Application project).
+- **Ticket 8: Bulk User Ingestion** ✅
+    I approached the bulk ingestion feature by first accepting a file upload, saving it, then
+	immediately enqueuing a Hangfire background job to process it and return a `jobId` to the client with a `202 Accepted` response, 
+	allowing the client to poll `GET /api/import/{jobId}` for real-time progress updates. 
+	I process the file by performing a single batched duplicate email check against the database (Using `HashSets`), 
+	validates all rows upfront, then constructs fully similar `AspNetUsers` DataTable — manually setting all Identity-required fields since I bypass EF's change tracker and `UserManager` entirely,
+	before writing users directly to the `AspNetUsers` table via `SqlBulkCopy` and their corresponding `AspNetUserRoles` records. reducing database round trips. 
+	Throughout processing, I update the `ImportJob` entity with live progress metrics including `TotalRows`, `Passed`, and `Failed` counts, 
+	and upon completion I persist any failed records to disk as both `.csv` and `.xlsx` files under `wwwroot/Storage/BulkImports` using CsvHelper and MiniExcel respectively,
+	making them available for download via a dedicated endpoint.
 	
-	[Commit](https://github.com/peacemaker-eneji/StaffManagementSystem/commit/9ac7f894e9c6e6a433d0fb2df17d771d79267e5f) -->
+	![swagger ui](docs/sprint1/ticket8/swagger_ui.png)
+	Api Endpoints
 
-- **Ticket 9: Attendance Commands** ❌
+	![swagger ui](docs/sprint1/ticket8/hangfire.png)
 
-	<!-- Added mediatR, added an AssemblyReference Class to all projects (Commands and Queries are in the Application project).
+	Completed Hangfire Import jobs
+
+	[Commit](https://github.com/peacemaker-eneji/StaffManagementSystem/commit/205b89855cd485e281d3236257d54389d15e0007)
+
+- **Ticket 9: Attendance Commands** ✅
+	When an employee checks in using the User Id, the system records the time and automatically determines their attendance status — whether they're present or late. 
+	When they check out, the system updates their existing attendance record.
+
+	![swagger ui](docs/sprint1/ticket9/swagger_ui.png)
 	
-	[Commit](https://github.com/peacemaker-eneji/StaffManagementSystem/commit/9ac7f894e9c6e6a433d0fb2df17d771d79267e5f) -->
+	[Commit](https://github.com/peacemaker-eneji/StaffManagementSystem/commit/5c90e628195c2f3741e0f9c5f2453e3d647d4ad6) 
 
-- **Ticket 10: Business Rules Enforcement** ❌
+- **Ticket 10: Business Rules Enforcement** ✅
 
-	<!-- Added mediatR, added an AssemblyReference Class to all projects (Commands and Queries are in the Application project).
-	
-	[Commit](https://github.com/peacemaker-eneji/StaffManagementSystem/commit/9ac7f894e9c6e6a433d0fb2df17d771d79267e5f) -->
+	The logic rules for the Check-In and Check-Out was implemented as methods in the AttendanceRecord Model (Domain Layer)
+
+	[Business Logic](https://github.com/peacemaker-eneji/StaffManagementSystem/blob/master/StaffManagementSystem.Domain/Models/AttendanceRecord.cs)
 
 
 
