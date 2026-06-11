@@ -47,7 +47,7 @@ namespace StaffManagementSystem.Application.Features.Attendance.Commands {
                 return new ApiResponse<CheckInResponse> {
                     Status = StatusCodes.Status403Forbidden,
                     Success = false,
-                    Message = "Already clocked in for today."
+                    Message = "Already checked in for today."
                 };
             }
 
@@ -78,7 +78,7 @@ namespace StaffManagementSystem.Application.Features.Attendance.Commands {
             );
             return new ApiResponse<CheckInResponse> {
                 Status = StatusCodes.Status202Accepted,
-                Message = "clocked in successfully.",
+                Message = "checked in successfully.",
                 Data = response
             };
         }

@@ -36,7 +36,7 @@ namespace StaffManagementSystem.Application.Features.Attendance.Commands {
             if (record is null) return new ApiResponse<CheckOutResponse> {
                 Status = StatusCodes.Status403Forbidden,
                 Success = false,
-                Message = "No clock-in record found for today."
+                Message = "No check-in record found for today."
             };
 
             // Domain method handles all business rules and throws DomainException on violations
@@ -67,7 +67,7 @@ namespace StaffManagementSystem.Application.Features.Attendance.Commands {
 
             return new ApiResponse<CheckOutResponse> {
                 Status = StatusCodes.Status202Accepted,
-                Message = "Clocked Out Successfully",
+                Message = "Checked Out Successfully",
                 Data = response
             };
         }

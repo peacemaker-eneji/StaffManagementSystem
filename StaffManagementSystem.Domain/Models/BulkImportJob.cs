@@ -1,4 +1,6 @@
 ﻿using StaffManagementSystem.Domain.Enums;
+using StaffManagementSystem.Domain.Extensions;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StaffManagementSystem.Domain.Models {
 
@@ -12,5 +14,7 @@ namespace StaffManagementSystem.Domain.Models {
         public DateTime StartedAt { get; set; }
         public DateTime? CompletedAt { get; set; }
         public BulkImportJobStatus Status { get; set; } = BulkImportJobStatus.Queued;
+        [NotMapped]
+        public string Description => Status.GetDescription()!;
     }
 }

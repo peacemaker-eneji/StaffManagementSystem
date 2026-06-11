@@ -14,9 +14,8 @@ namespace StaffManagementSystem.Domain.Models {
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public AttendanceStatus Status { get; set; }
 
-        private static TimeOnly ResumptionTime = new TimeOnly(11); // 11 am
-        private static TimeOnly GraceEnd = new TimeOnly(11, 20);
-        private static TimeOnly HalfDayCutoff = ResumptionTime.Add(new TimeSpan(4, 30, 0));
+        public static TimeOnly ResumptionTime = new TimeOnly(11); // 11 am
+        public static TimeOnly GraceEnd = new TimeOnly(11, 15);
 
         public static AttendanceRecord CheckIn(string userId, DateOnly date, TimeOnly clockInTime) {
             var record = new AttendanceRecord {
@@ -29,17 +28,17 @@ namespace StaffManagementSystem.Domain.Models {
             return record;
         }
 
-        public void CheckOut(TimeOnly clockOutTime) {
+        public void CheckOut(TimeOnly checkOutTime) {
             if (ClockIn is null)
-                throw new DomainException("Cannot clock out without clocking in first.");
+                throw new DomainException("Cannot check out without clocking in first.");
 
-            if (clockOutTime <= ClockIn)
-                throw new DomainException("Clock-out time must be after clock-in time.");
+            if (checkOutTime <= ClockIn)
+                throw new DomainException("Check-out time must be after check-in time.");
 
             if (ClockOut is not null)
-                throw new DomainException("Already clocked out for today.");
+                throw new DomainException("Already Checked out for today.");
 
-            ClockOut = clockOutTime;
+            ClockOut = checkOutTime;
             if ((ClockOut.Value - ClockIn.Value).TotalHours < 4) IsHalfDay = true;
         }
     }

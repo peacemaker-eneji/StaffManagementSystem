@@ -28,13 +28,13 @@ namespace StaffManagementSystem.Api.Controllers {
         }
 
         [HttpGet("{jobId}")]
-        public async Task<IActionResult> GetStatus(string jobId) {
+        public async Task<ActionResult<ApiResponse<BulkImportJob>>> GetStatus(string jobId) {
             var response = await _sender.Send(new GetImportStatusQuery(jobId));
             return StatusCode(response.Status, response);
         }
 
         [HttpGet("failed-imports/{id}/{type}")]
-        public async Task<ActionResult> GetFailedImportTemplate(string id, string type) {
+        public async Task<ActionResult> GetFailedImportFile(string id, string type) {
             if (type != "csv" && type != "xlsx") return BadRequest("Invalid file type");
 
             var filePath = Path.Combine(_env.WebRootPath, "Storage", "BulkImports", "FailedImports", $"{id}.{type}");

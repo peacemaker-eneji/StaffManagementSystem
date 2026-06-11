@@ -102,9 +102,10 @@ middleware pipelines, and authentication via ASP.NET Core Identity, making it a 
 
 - **Ticket 10: Business Rules Enforcement** ✅
 
-	The logic rules for the Check-In and Check-Out was implemented as methods in the AttendanceRecord Model (Domain Layer)
+	The logic rules for the Check-In and Check-Out was implemented as methods in the AttendanceRecord Model (Domain Layer) with
+	some validation and checks done by the Check-in and Check-out MediatR commands.
 
-	[Business Logic](https://github.com/peacemaker-eneji/StaffManagementSystem/blob/master/StaffManagementSystem.Domain/Models/AttendanceRecord.cs)
+	[Core Business Logic](https://github.com/peacemaker-eneji/StaffManagementSystem/blob/master/StaffManagementSystem.Domain/Models/AttendanceRecord.cs)
 
 
 

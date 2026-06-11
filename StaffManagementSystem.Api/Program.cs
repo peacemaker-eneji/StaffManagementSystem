@@ -12,6 +12,7 @@ Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
+builder.Logging.AddConsole();
 builder.Services.AddApplication(config);
 builder.Services.AddInfrastructure(config);
 builder.Services.AddPresentation(config);

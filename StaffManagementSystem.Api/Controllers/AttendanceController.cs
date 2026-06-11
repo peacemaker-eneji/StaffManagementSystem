@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using StaffManagementSystem.Application.Features.Attendance.Commands;
+using StaffManagementSystem.Application.Features.Attendance.Queries;
 using StaffManagementSystem.Domain.Models;
 
 namespace StaffManagementSystem.Api.Controllers {
@@ -22,6 +23,24 @@ namespace StaffManagementSystem.Api.Controllers {
         [HttpPost("check-out/{id}")]
         public async Task<ActionResult<ApiResponse<CheckOutResponse>>> CheckOut(string id) {
             var response = await _mediator.Send(new CheckOutCommand(id));
+            return StatusCode(response.Status, response);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ApiResponse<PagedResult<AttendanceRecordDto>>>> GetAttendance([FromQuery] GetAttendanceQuery request) {
+            var response = await _mediator.Send(request);
+            return StatusCode(response.Status, response);
+        }
+
+        [HttpGet("daily-attendance-report")]
+        public async Task<ActionResult<ApiResponse<PagedResult<DailyAttendanceReportDto>>>> GetDailyAttendanceReport([FromQuery] DailyAttendanceReportQuery request) {
+            var response = await _mediator.Send(request);
+            return StatusCode(response.Status, response);
+        }
+
+        [HttpGet("late-arrivals-report")]
+        public async Task<ActionResult<ApiResponse<PagedResult<LateArrivalDto>>>> GetLateArrivalsReport([FromQuery] LateArrivalsReportQuery request) {
+            var response = await _mediator.Send(request);
             return StatusCode(response.Status, response);
         }
     }
