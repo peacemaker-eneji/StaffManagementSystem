@@ -25,5 +25,10 @@ namespace StaffManagementSystem.Api.Controllers {
             var response = await _mediator.Send(request);
             return StatusCode(response.Status, response);
         }
+
+        [HttpDelete]
+        public async Task<ActionResult<ApiResponse>> DeleteUser(DeactivateUserCommand request) {
+            return null!;
+        }
     }
 }
