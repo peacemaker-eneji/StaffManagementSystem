@@ -46,6 +46,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\Storage\BulkImports\Uploads\" />
     <Folder Include="wwwroot\Storage\BulkImports\FailedImports\" />
+    <Folder Include="wwwroot\Storage\Exports\Attendance\" />
   </ItemGroup>
 
   <ItemGroup>
