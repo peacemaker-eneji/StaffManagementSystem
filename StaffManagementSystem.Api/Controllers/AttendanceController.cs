@@ -41,7 +41,7 @@ namespace StaffManagementSystem.Api.Controllers {
         }
 
         /// <summary>
-        /// Fetches attendance records using userId or date or both
+        /// Generate daily attendance reports for a given date range (optional)
         /// </summary>
         [HttpGet("daily-attendance-report")]
         public async Task<ActionResult<ApiResponse<PagedResult<DailyAttendanceReportDto>>>> GetDailyAttendanceReport([FromQuery] DailyAttendanceReportQuery request) {
