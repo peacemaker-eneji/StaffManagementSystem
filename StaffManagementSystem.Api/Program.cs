@@ -25,7 +25,8 @@ app.UseCors("AllowSpecificOrigin");
 app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHangfireServer();
+app.UseHangfireServer(); 
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
