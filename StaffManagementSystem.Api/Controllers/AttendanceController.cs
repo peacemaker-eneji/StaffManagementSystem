@@ -30,24 +30,37 @@ namespace StaffManagementSystem.Api.Controllers {
             return StatusCode(response.Status, response);
         }
 
+
+        /// <summary>
+        /// Fetches attendance records using userId or date or both
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<ApiResponse<PagedResult<AttendanceRecordDto>>>> GetAttendance([FromQuery] GetAttendanceQuery request) {
             var response = await _mediator.Send(request);
             return StatusCode(response.Status, response);
         }
 
+        /// <summary>
+        /// Fetches attendance records using userId or date or both
+        /// </summary>
         [HttpGet("daily-attendance-report")]
         public async Task<ActionResult<ApiResponse<PagedResult<DailyAttendanceReportDto>>>> GetDailyAttendanceReport([FromQuery] DailyAttendanceReportQuery request) {
             var response = await _mediator.Send(request);
             return StatusCode(response.Status, response);
         }
 
+        /// <summary>
+        /// Generate a report of late arrivals. optional date range
+        /// </summary>
         [HttpGet("late-arrivals-report")]
         public async Task<ActionResult<ApiResponse<PagedResult<LateArrivalDto>>>> GetLateArrivalsReport([FromQuery] LateArrivalsReportQuery request) {
             var response = await _mediator.Send(request);
             return StatusCode(response.Status, response);
         }
 
+        /// <summary>
+        /// Responds with a csv file of all attendance records satisfying your query.
+        /// </summary>
         [HttpGet("export-records")]
         public async Task<ActionResult> ExportAttendanceRecords([FromQuery] ExportAttendanceQuery request) {
             var response = await _mediator.Send(request);
