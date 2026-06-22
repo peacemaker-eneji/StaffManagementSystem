@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using DotNetEnv;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StaffManagementSystem.Application.Features.Attendance.Commands;
@@ -44,6 +45,16 @@ namespace StaffManagementSystem.Api.Controllers {
         [HttpGet("late-arrivals-report")]
         public async Task<ActionResult<ApiResponse<PagedResult<LateArrivalDto>>>> GetLateArrivalsReport([FromQuery] LateArrivalsReportQuery request) {
             var response = await _mediator.Send(request);
+            return StatusCode(response.Status, response);
+        }
+
+        [HttpGet("export-records")]
+        public async Task<ActionResult> ExportAttendanceRecords([FromQuery] ExportAttendanceQuery request) {
+            var response = await _mediator.Send(request);
+            if (response.Success) {
+                var bytes = System.IO.File.ReadAllBytes(response.Data);
+                return File(bytes, "application/octet-stream", Path.GetFileName(response.Data));
+            }
             return StatusCode(response.Status, response);
         }
     }

@@ -1,4 +1,17 @@
 <Solution>
+  <Folder Name="/misc/">
+    <File Path="StaffManagementSystem.Api/Controllers/AuthController.cs" />
+    <File Path="StaffManagementSystem.Application/Features/Auth/Commands/LoginCommand.cs" />
+    <File Path="StaffManagementSystem.Application/Features/Auth/Commands/SignupCommand.cs" />
+    <File Path="StaffManagementSystem.Application/Features/Users/Commands/ActivateUserCommand.cs" />
+    <File Path="StaffManagementSystem.Application/Features/Users/Commands/DeactivateUserCommand.cs" />
+    <File Path="StaffManagementSystem.Application/Features/Users/Commands/DeleteUserCommand.cs" />
+    <File Path="StaffManagementSystem.Application/Features/Users/Commands/UpdateUserCommand.cs" />
+    <File Path="StaffManagementSystem.Application/Features/Users/Queries/GetUserInfoQuery.cs" />
+    <File Path="StaffManagementSystem.Application/Features/Users/Queries/GetUserQuery.cs" />
+    <File Path="StaffManagementSystem.Application/Features/Users/Queries/GetUsersInfoQuery.cs" />
+    <File Path="StaffManagementSystem.Application/Features/Users/Queries/GetUsersQuery.cs" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />
     <File Path="README.md" />
