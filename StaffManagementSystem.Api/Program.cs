@@ -4,6 +4,7 @@ using Hangfire;
 using StaffManagementSystem.Api;
 using StaffManagementSystem.Application;
 using StaffManagementSystem.Infrastructure;
+using StaffManagementSystem.Infrastructure.Jobs;
 using StaffManagementSystem.Infrastructure.Persistence;
 
 Env.Load();
@@ -32,5 +33,6 @@ if (app.Environment.IsDevelopment()) {
     app.UseHangfireDashboard();
 }
 await DatabaseInitializer.InitializeAsync(app.Services);
+JobScheduler.RegisterRecurringJobs();
 
 app.Run();
