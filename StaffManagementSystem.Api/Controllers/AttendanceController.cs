@@ -1,3 +1,4 @@
+
 ﻿using DotNetEnv;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +10,7 @@ using StaffManagementSystem.Domain.Models;
 using System.Data;
 
 namespace StaffManagementSystem.Api.Controllers {
+    [Authorize]
     [ApiController]
     [Route("attendance")]
     public class AttendanceController : ControllerBase {
