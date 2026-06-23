@@ -4,6 +4,7 @@ using Hangfire;
 using StaffManagementSystem.Api;
 using StaffManagementSystem.Application;
 using StaffManagementSystem.Infrastructure;
+using StaffManagementSystem.Infrastructure.Jobs;
 using StaffManagementSystem.Infrastructure.Persistence;
 
 Env.Load();
@@ -24,7 +25,8 @@ app.UseCors("AllowSpecificOrigin");
 app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHangfireServer();
+app.UseHangfireServer(); 
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
@@ -32,5 +34,6 @@ if (app.Environment.IsDevelopment()) {
     app.UseHangfireDashboard();
 }
 await DatabaseInitializer.InitializeAsync(app.Services);
+JobScheduler.RegisterRecurringJobs();
 
 app.Run();

@@ -10,6 +10,7 @@ namespace StaffManagementSystem.Infrastructure {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config) {
             services.AddIdentityServices();
             services.AddPersistence(config);
+            services.AddJobs();
             services.AddScoped<IBulkImportService, BulkImportService>();
             return services;
         }

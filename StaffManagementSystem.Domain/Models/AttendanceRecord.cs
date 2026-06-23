@@ -14,8 +14,9 @@ namespace StaffManagementSystem.Domain.Models {
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public AttendanceStatus Status { get; set; }
 
-        public static TimeOnly ResumptionTime = new TimeOnly(11); // 11 am
+        public static TimeOnly ResumptionTime = new TimeOnly(11, 0); // 11 am
         public static TimeOnly GraceEnd = new TimeOnly(11, 15);
+        public static TimeOnly CloseTime = new TimeOnly(20, 0); // 8 pm
 
         public static AttendanceRecord CheckIn(string userId, DateOnly date, TimeOnly clockInTime) {
             var record = new AttendanceRecord {
