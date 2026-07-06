@@ -6,6 +6,7 @@ namespace StaffManagementSystem.Domain.Interfaces {
         public DbSet<User> Users { get; set; }
         public DbSet<AttendanceRecord> AttendanceRecords { get; set; }
         public DbSet<BulkImportJob> BulkImportJobs { get; set; }
+        public DbSet<CalendarSource> CalendarSources { get; set; }
         Task<int> SaveChangesAsync(CancellationToken ct = default);
     }
 }
