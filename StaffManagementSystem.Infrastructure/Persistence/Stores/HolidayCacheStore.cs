@@ -4,15 +4,19 @@ using StaffManagementSystem.Domain.Models;
 using System.Text.Json;
 
 namespace StaffManagementSystem.Infrastructure.Persistence.Stores {
-    public sealed class DistributedCacheHolidayStore(IDistributedCache cache) : IHolidayCacheStore {
+    public class HolidayCacheStore : IHolidayCacheStore {
+        private readonly IDistributedCache _cache;
         private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
-
         private static string BuildKey(string calendarSourceId) => $"holidays:{calendarSourceId}";
+
+        public HolidayCacheStore(IDistributedCache cache) {
+            _cache = cache;
+        }
 
         public async Task<IReadOnlyList<Holiday>?> GetAsync(
             string calendarSourceId,
             CancellationToken cancellationToken = default) {
-            var json = await cache.GetStringAsync(BuildKey(calendarSourceId), cancellationToken);
+            var json = await _cache.GetStringAsync(BuildKey(calendarSourceId), cancellationToken);
             return json is null ? null : JsonSerializer.Deserialize<List<Holiday>>(json, JsonOptions);
         }
 
@@ -23,7 +27,7 @@ namespace StaffManagementSystem.Infrastructure.Persistence.Stores {
             CancellationToken cancellationToken = default) {
             var json = JsonSerializer.Serialize(holidays, JsonOptions);
 
-            await cache.SetStringAsync(
+            await _cache.SetStringAsync(
                 BuildKey(calendarSourceId),
                 json,
                 new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = ttl },

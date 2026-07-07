@@ -15,7 +15,7 @@ namespace StaffManagementSystem.Infrastructure.Extensions {
             services.AddDistributedMemoryCache();
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(config.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly(assembly_name)));
             services.AddScoped<IAppDbContext, AppDbContext>();
-            services.AddScoped<IHolidayCacheStore, DistributedCacheHolidayStore>();
+            services.AddSingleton<IHolidayCacheStore, HolidayCacheStore>();
 
             return services;
         }
