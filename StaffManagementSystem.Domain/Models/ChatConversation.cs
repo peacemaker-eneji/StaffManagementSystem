@@ -3,11 +3,13 @@ using Microsoft.Extensions.AI;
 using System.Runtime.CompilerServices;
 
 namespace StaffManagementSystem.Domain.Models {
+
     public class ChatConversation {
         private IChatClient? _chatClient;
         private List<ChatMessage> _history = new();
         private ChatOptions? _chatOptions;
         private readonly Microsoft.Extensions.AI.ChatRole _userChatRole = Microsoft.Extensions.AI.ChatRole.User;
+        private readonly Microsoft.Extensions.AI.ChatRole _systemChatRole = Microsoft.Extensions.AI.ChatRole.System;
 
         public string ConversationId { get; } = Guid.NewGuid().ToString();
 
@@ -20,7 +22,7 @@ namespace StaffManagementSystem.Domain.Models {
             chat._chatClient = chatClient;
             chat._history = history;
             chat._chatOptions = new ChatOptions() {
-                Tools = (IList<AITool>)tools,
+                Tools = tools.Cast<AITool>().ToList(),
                 Temperature = 0.1f,
                 ToolMode = ChatToolMode.Auto,
             };
@@ -35,6 +37,12 @@ namespace StaffManagementSystem.Domain.Models {
         }
 
         public async IAsyncEnumerable<ChatResponseUpdate> SendStreamingAsync(string userMessage, [EnumeratorCancellation] CancellationToken ct = default) {
+            var contextPrompt = $"""
+                **use this context info**
+                Current Date: {DateTime.UtcNow:yyyy-MM-dd}
+                Current Time: {DateTime.UtcNow:HH:mm:ss} UTC
+                """;
+            _history.Add(new ChatMessage(_systemChatRole, contextPrompt));
             _history.Add(new ChatMessage(_userChatRole, userMessage));
 
             var updates = new List<ChatResponseUpdate>();

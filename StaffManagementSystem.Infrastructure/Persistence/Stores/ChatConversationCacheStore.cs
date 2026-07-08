@@ -19,22 +19,19 @@ namespace StaffManagementSystem.Infrastructure.Persistence.Stores {
             _cache = new MemoryCache(new MemoryCacheOptions());
         }
 
-        public ChatConversation GetOrStart(Guid conversationId) {
-            return _cache.GetOrCreate(conversationId, entry => {
-                entry.SlidingExpiration = _idleTimeout;
-                entry.AbsoluteExpirationRelativeToNow = _expTimeout;
-
-                var conversation = _chatBot.StartConversation();
-                return conversation;
-            })!;
+        public void Add(string conversationId, ChatConversation chatConversation) {
+            _cache.Set(conversationId, chatConversation, new MemoryCacheEntryOptions {
+                SlidingExpiration = _idleTimeout,
+                AbsoluteExpirationRelativeToNow = _expTimeout
+            });
         }
 
-        public ChatConversation? TryGet(Guid conversationId) {
+        public ChatConversation? Get(string conversationId) {
             return _cache.TryGetValue(conversationId, out ChatConversation? conversation) ? conversation : null;
         }
 
-        public async Task EndAsync(Guid conversationId) {
-            if (_cache.TryGetValue(conversationId, out ChatConversation? conversation)) _cache.Remove(conversationId);
+        public void Remove(string conversationId) {
+            if (Get(conversationId) is not null) _cache.Remove(conversationId);
         }
     }
 
