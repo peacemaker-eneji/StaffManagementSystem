@@ -1,20 +1,20 @@
-﻿using MediatR;
+﻿
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using StaffManagementSystem.Application.Helpers;
 using StaffManagementSystem.Domain.Enums;
 using StaffManagementSystem.Domain.Interfaces;
 using StaffManagementSystem.Domain.Models;
-
-namespace StaffManagementSystem.Application.Features.Attendance.Queries {
+namespace StaffManagementSystem.Application.Features.Attendance.Queries
+{
     public record GetAttendanceQuery(
         DateOnly? Date = null,
         string? UserId = null,
         int Page = 1,
         int PageSize = 10
     ) : IRequest<ApiResponse<PagedResult<AttendanceRecordDto>>>;
-
     public record AttendanceRecordDto(
         string Id,
         string UserId,
@@ -26,37 +26,50 @@ namespace StaffManagementSystem.Application.Features.Attendance.Queries {
         bool IsHalfDay,
         double? HoursWorked
     );
-
-    public class GetAttendanceHandler : IRequestHandler<GetAttendanceQuery, ApiResponse<PagedResult<AttendanceRecordDto>>> {
-
+    public class GetAttendanceHandler : IRequestHandler<GetAttendanceQuery, ApiResponse<PagedResult<AttendanceRecordDto>>>
+    {
         private readonly IAppDbContext _context;
         private readonly UserManager<User> _userManager;
-
-        public GetAttendanceHandler(IAppDbContext context, UserManager<User> userManager) {
+        private readonly CacheService _cache;
+        public GetAttendanceHandler(IAppDbContext context, UserManager<User> userManager, CacheService cache)
+        {
             _context = context;
             _userManager = userManager;
+            _cache = cache;
         }
-
-        public async Task<ApiResponse<PagedResult<AttendanceRecordDto>>> Handle(GetAttendanceQuery request, CancellationToken ct) {
-            DateOnly a = DateOnly.FromDateTime(DateTime.Now);
-
-            if (request.UserId is not null) {
+        public async Task<ApiResponse<PagedResult<AttendanceRecordDto>>> Handle(GetAttendanceQuery request, CancellationToken ct)
+        {
+            
+            var cacheKey = $"attendance_{request.UserId}_{request.Date}_{request.Page}_{request.PageSize}";
+            
+            var cached = await _cache.GetAsync<PagedResult<AttendanceRecordDto>>(cacheKey);
+            if (cached is not null)
+            {
+                return new ApiResponse<PagedResult<AttendanceRecordDto>>
+                {
+                    Status = StatusCodes.Status200OK,
+                    Message = "Records retrieved from cache.",
+                    Data = cached
+                };
+            }
+            
+            if (request.UserId is not null)
+            {
                 var user = await _userManager.FindByIdAsync(request.UserId);
-
-                if (user is null) return new ApiResponse<PagedResult<AttendanceRecordDto>> {
+                if (user is null) return new ApiResponse<PagedResult<AttendanceRecordDto>>
+                {
                     Status = StatusCodes.Status404NotFound,
                     Message = "User not found",
                     Success = false
                 };
             }
-
+            
             var query = _context.AttendanceRecords
                 .Include(a => a.User)
-                .Where(a => (request.UserId == null || a.UserId == request.UserId) && (request.Date == null || a.Date == request.Date))
+                .Where(a => (request.UserId == null || a.UserId == request.UserId)
+                         && (request.Date == null || a.Date == request.Date))
                 .OrderByDescending(a => a.Date);
-
             var totalCount = await query.CountAsync(ct);
-
             var records = await query
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
@@ -69,18 +82,21 @@ namespace StaffManagementSystem.Application.Features.Attendance.Queries {
                     a.ClockOut,
                     a.Status,
                     a.IsHalfDay,
-                    a.ClockIn != null && a.ClockOut != null ? Math.Round((a.ClockOut.Value - a.ClockIn.Value).TotalHours, 2) : null
+                    a.ClockIn != null && a.ClockOut != null
+                        ? Math.Round((a.ClockOut.Value - a.ClockIn.Value).TotalHours, 2)
+                        : null
                 ))
                 .ToListAsync(ct);
-
             var result = new PagedResult<AttendanceRecordDto>(
                 records,
                 totalCount,
                 request.Page,
                 request.PageSize
             );
-
-            return new ApiResponse<PagedResult<AttendanceRecordDto>> {
+            // 5. Save to Redis for next time
+            await _cache.SetAsync(cacheKey, result, minutes: 5);
+            return new ApiResponse<PagedResult<AttendanceRecordDto>>
+            {
                 Status = StatusCodes.Status200OK,
                 Message = "Records retrieved.",
                 Data = result

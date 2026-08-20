@@ -20,6 +20,12 @@ namespace StaffManagementSystem.Api {
             services.AddAuthorization();
             services.AddSwaggerDocs();
             services.AddHangfireService(config);
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = config.GetSection("Redis")["ConnectionString"];
+                options.InstanceName = "StaffManagementSystem_";
+
+            });
 
             return services;
         }
