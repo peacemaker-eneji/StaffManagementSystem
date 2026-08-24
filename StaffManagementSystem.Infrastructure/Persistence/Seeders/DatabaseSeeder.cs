@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using StaffManagementSystem.Domain.Enums;
+using StaffManagementSystem.Domain.Interfaces;
 using StaffManagementSystem.Domain.Models;
 
 namespace StaffManagementSystem.Infrastructure.Persistence.Seeders {
@@ -8,6 +10,7 @@ namespace StaffManagementSystem.Infrastructure.Persistence.Seeders {
         static public async Task SeedAsync(IServiceProvider serviceProvider) {
             await SeedRolesAsync(serviceProvider);
             await SeedUsersAsync(serviceProvider);
+            await SeedCalendarSourceAsync(serviceProvider);
         }
         static public async Task SeedRolesAsync(IServiceProvider serviceProvider) {
             using var scope = serviceProvider.CreateScope();
@@ -42,9 +45,28 @@ namespace StaffManagementSystem.Infrastructure.Persistence.Seeders {
 
             foreach (var user in users) {
                 user.UserName = user.Email;
+                if (await userManager.FindByEmailAsync(user.Email) is not null) continue;
                 await userManager.CreateAsync(user, Environment.GetEnvironmentVariable("DEFAULT_PASSWORD")!);
                 await userManager.AddToRoleAsync(user, user.Role.ToString());
             }
+        }
+        static public async Task SeedCalendarSourceAsync(IServiceProvider serviceProvider) {
+            using var scope = serviceProvider.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
+
+            List<CalendarSource> calendars = [
+                new CalendarSource{
+                    Name = "Nigerian Holiday Calendar",
+                    IcsUrl = "https://www.officeholidays.com/ics-all/nigeria"
+                }
+            ];
+            
+            foreach (CalendarSource cal in calendars) {
+                if (await context.CalendarSources.FirstOrDefaultAsync(s => s.IcsUrl == cal.IcsUrl) is not null) continue;
+                cal.Id = Guid.NewGuid().ToString();
+                await context.CalendarSources.AddAsync(cal);
+            }
+            await context.SaveChangesAsync();
         }
     }
 }

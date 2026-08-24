@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StaffManagementSystem.Domain.Interfaces;
 using StaffManagementSystem.Infrastructure.Extensions;
@@ -11,6 +10,7 @@ namespace StaffManagementSystem.Infrastructure {
             services.AddIdentityServices();
             services.AddPersistence(config);
             services.AddJobs();
+            services.AddChatBotService();
             services.AddScoped<IBulkImportService, BulkImportService>();
             return services;
         }

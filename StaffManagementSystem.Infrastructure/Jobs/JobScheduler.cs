@@ -8,11 +8,24 @@ namespace StaffManagementSystem.Infrastructure.Jobs {
                 "auto-mark-absent-attendance",
                 job => job.RunAsync(),
                 "0 21 * * *");
-
             RecurringJob.AddOrUpdate<AutoCheckOutJob>(
                 "auto-checkout-attendance",
                 job => job.RunAsync(),
-                "0 21 * * *");
+                "0 21 * * *"); 
+
+            // every 6hrs
+            RecurringJob.AddOrUpdate<RefreshCalendarCacheJob>(
+                "refresh-calendar-cache",
+                job => job.RunAsync(),
+                Cron.HourInterval(6));
+
+            // trigger on restarts
+            using (var connection = JobStorage.Current.GetConnection()) {
+                var manager = new RecurringJobManager(JobStorage.Current);
+                manager.TriggerJob("refresh-calendar-cache");
+            }
+
+
         }
     }
 }

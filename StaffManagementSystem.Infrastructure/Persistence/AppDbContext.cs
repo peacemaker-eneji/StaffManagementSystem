@@ -9,6 +9,7 @@ namespace StaffManagementSystem.Infrastructure.Persistence {
         public override DbSet<User> Users { get; set; }
         public DbSet<AttendanceRecord> AttendanceRecords { get; set; }
         public DbSet<BulkImportJob> BulkImportJobs { get; set; }
+        public DbSet<CalendarSource> CalendarSources { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
