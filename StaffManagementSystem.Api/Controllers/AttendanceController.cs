@@ -9,6 +9,7 @@ using StaffManagementSystem.Domain.Enums;
 using StaffManagementSystem.Domain.Models;
 using System.Data;
 
+
 namespace StaffManagementSystem.Api.Controllers {
     [Authorize]
     [ApiController]
@@ -72,5 +73,23 @@ namespace StaffManagementSystem.Api.Controllers {
             }
             return StatusCode(response.Status, response);
         }
+
+
+
+        [HttpGet("monthly-summary")]
+        public async Task<ActionResult<ApiResponse<PagedResult<MonthlySummaryDto>>>> GetMonthlySummary(
+    [FromQuery] MonthlySummaryQuery request)
+        {
+            var response = await _mediator.Send(request);
+            return StatusCode(response.Status, response);
+        }
+
+
+
+
+
+
+
+
     }
 }
